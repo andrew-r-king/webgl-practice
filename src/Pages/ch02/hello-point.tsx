@@ -8,6 +8,9 @@ export const title = "Ch02: Hello Point";
 		vec4 in this case refers to a homogeneous coordinate, equivalent to:
 			vec3(0.0/1.0, 0.0/1.0, 0.0/1.0)
 
+		hence, if you set 1.0 to 0.0, you are dividing by zero, so the coordinate
+		disappears into the void
+
 */
 
 const VSHADER_SOURCE: string = `void main() {
