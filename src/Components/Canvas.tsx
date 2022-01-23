@@ -3,17 +3,19 @@ import styled from "styled-components";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-import { CanvasHelper } from "GL";
+import { CanvasHelper, FlatContext, initShaders, WebGLContext } from "GL";
 
 type Props = {
 	id: string;
 	width: number;
 	height?: number;
-	onLoad2D?: (ctx: CanvasRenderingContext2D) => void;
-	onLoad3D?: (gl: WebGLRenderingContext) => void;
+	onLoad2D?: (ctx: FlatContext) => void;
+	onLoad3D?: (gl: WebGLContext) => void;
+	vertexShader?: string;
+	fragmentShader?: string;
 };
 
-const Canvas = ({ id, width, height, onLoad2D, onLoad3D }: Props) => {
+const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vertexShader, fragmentShader }: Props) => {
 	const [error, setError] = useState<Optional<string>>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -22,6 +24,12 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D }: Props) => {
 			if (!!onLoad3D) {
 				let gl = CanvasHelper.create3DContext(canvasRef.current);
 				if (!!gl) {
+					if (!!vertexShader && fragmentShader) {
+						if (!initShaders(gl, vertexShader, fragmentShader)) {
+							setError("Failed to initialize shaders.");
+							return;
+						}
+					}
 					onLoad3D(gl);
 				} else {
 					setError(CanvasHelper.lastError);
@@ -35,7 +43,7 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D }: Props) => {
 				}
 			}
 		}
-	}, [canvasRef.current, onLoad2D, onLoad3D, id]);
+	}, [canvasRef.current, onLoad2D, onLoad3D, vertexShader, fragmentShader, id]);
 
 	if (!!error) {
 		return <div>{error}</div>;
