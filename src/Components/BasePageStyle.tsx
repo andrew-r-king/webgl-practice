@@ -1,6 +1,7 @@
 import { createGlobalStyle, css } from "styled-components";
 
-import { globalFonts } from "./Fonts";
+import { globalFonts } from "Theme";
+import { Theme } from "Theme/Theme";
 
 const styleVariables = {
 	baseFontSize: 16,
@@ -16,6 +17,7 @@ const cssReset = css`
 
 	blockquote,
 	body,
+	div,
 	dd,
 	dl,
 	figure,
@@ -23,7 +25,9 @@ const cssReset = css`
 	h2,
 	h3,
 	h4,
-	p {
+	p,
+	a {
+		line-height: 1;
 		margin: 0;
 	}
 
@@ -80,8 +84,8 @@ const BaseStyle = createGlobalStyle`
 
     html {
         font-size: ${styleVariables.baseFontSize}px;
-        background-color: #fff;
-		color: #333;
+        background-color: ${Theme.htmlBackground};
+		color: ${Theme.text};
 		scroll-behavior: smooth;
     }
 
@@ -104,6 +108,24 @@ const BaseStyle = createGlobalStyle`
 		width: 100%;
 		text-align: center;
 	}
+
+    a {
+		display: inline-block;
+		cursor: pointer;
+		text-decoration: none;
+		font-weight: 400;
+		color: ${Theme.text};
+		transition: color 0.125s linear;
+
+		&:hover {
+			color: lightblue;
+		}
+
+		&.active {
+			font-weight: 600;
+			color: lightblue;
+		}
+    }
 
 	.router-progress-bar {
 		z-index: 50;

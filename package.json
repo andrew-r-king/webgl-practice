@@ -9,8 +9,11 @@
 	},
 	"alias": {
 		"Components": "./src/Components",
+		"HighComponents": "./src/HighComponents",
 		"Hooks": "./src/Hooks",
 		"Layouts": "./src/Layouts",
+		"Server": "./src/Server",
+		"Theme": "./src/Theme",
 		"Types": "./src/Types",
 		"Utility": "./src/Utility"
 	},

@@ -2,12 +2,18 @@ import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
 
-type Props = {
-	children?: React.ReactNode;
-	title: string;
-};
+import { Theme } from "Theme/Theme";
 
-const Page = ({ title, children }: Props) => {
+import { Navigation, NavProps } from "./Navigation";
+import { PageHeader } from "./PageHeader";
+
+type Props = React.PropsWithChildren<
+	NavProps & {
+		title: string;
+	}
+>;
+
+const Page = ({ title, children, ...navProps }: Props) => {
 	return (
 		<>
 			<Head>
@@ -18,7 +24,10 @@ const Page = ({ title, children }: Props) => {
 				/>
 			</Head>
 			<Main>
-				<Container>{children}</Container>
+				<Container>
+					<PageHeader name={title} />
+					<Navigation {...navProps}>{children}</Navigation>
+				</Container>
 			</Main>
 		</>
 	);
@@ -39,6 +48,9 @@ const Main = styled.main`
 const Container = styled.div`
 	display: block;
 	position: relative;
-	padding: 0;
-	margin: 0 auto;
+	padding: 1.5rem 2rem;
+	margin: 2rem auto;
+	max-width: 64rem;
+	background: ${Theme.background};
+	border-radius: 1rem;
 `;
