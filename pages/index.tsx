@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 
-import { HomeLayout } from "Layouts";
+import { CanvasLayout } from "Layouts";
 
 const Home: NextPage = () => {
-	return <HomeLayout />;
+	return <CanvasLayout title="Home" />;
 };
 
 export default Home;
