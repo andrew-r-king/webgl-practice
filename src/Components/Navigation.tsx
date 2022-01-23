@@ -33,7 +33,7 @@ const Styles = styled.div`
 		display: flex;
 		flex-direction: column;
 		padding-right: 2rem;
-		width: 16rem;
+		width: 17.5rem;
 
 		> a {
 			display: block;

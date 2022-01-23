@@ -19,7 +19,7 @@ const stringEndsWith = (str: string, matches: string[]): boolean => {
 
 const getPageRoutes = async (): Promise<ResultsGetPageRoutes> => {
 	try {
-		const dirPages = path.join("src", "Layouts");
+		const dirPages = path.join("src", "Pages");
 		const pathsRaw = await recursiveDirectorySearch(dirPages, ["tsx"]);
 		const paths = pathsRaw.reduce<string[]>(
 			(acc, inPath, i, arr) => {

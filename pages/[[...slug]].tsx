@@ -11,10 +11,8 @@ type StaticProps = ResultsGetPageRoutes & {
 	slug: string;
 };
 
-const dpages = path.join("src", "Layouts");
-
 const DynamicPage = ({ slug, paths }: StaticProps) => {
-	const ComponentImport = require(`Layouts/${slug}`);
+	const ComponentImport = require(`Pages/${slug}`);
 	const title = ComponentImport.title ?? "Untitled";
 	return (
 		<Page {...{ title, paths }}>
@@ -25,21 +23,7 @@ const DynamicPage = ({ slug, paths }: StaticProps) => {
 
 export const getStaticPaths = async () => {
 	try {
-		const pathsRaw = await recursiveDirectorySearch(dpages, ["tsx"]);
-		const paths = pathsRaw.reduce<string[]>((acc, inPath, i, arr) => {
-			let result: string = inPath.substring(0, inPath.lastIndexOf("."));
-			result = result.slice(dpages.length + 1);
-			if (result.endsWith("/index")) {
-				result = result.slice(0, -6);
-
-				if (result.length === 0) result = "/";
-			}
-
-			acc.push(result);
-			return acc;
-		}, []);
-		// console.log(paths);
-
+		const { paths } = await getPageRoutes();
 		return {
 			fallback: false,
 			paths,

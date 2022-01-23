@@ -11,7 +11,7 @@
 		"Components": "./src/Components",
 		"HighComponents": "./src/HighComponents",
 		"Hooks": "./src/Hooks",
-		"Layouts": "./src/Layouts",
+		"Pages": "./src/Pages",
 		"Server": "./src/Server",
 		"Theme": "./src/Theme",
 		"Types": "./src/Types",
