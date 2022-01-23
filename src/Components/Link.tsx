@@ -1,7 +1,6 @@
 import { default as NextLink, LinkProps as NextLinkProps } from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import styled from "styled-components";
 
 type Props = React.PropsWithChildren<NextLinkProps> & {
 	showActive?: boolean;

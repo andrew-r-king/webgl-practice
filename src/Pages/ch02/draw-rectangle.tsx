@@ -2,7 +2,7 @@ import { BasicCanvas } from "Components";
 
 export const title = "Ch02: Draw Rectangle";
 
-const Page = () => {
+const Component = () => {
 	return (
 		<BasicCanvas
 			onLoad={(canvas) => {
@@ -16,4 +16,4 @@ const Page = () => {
 	);
 };
 
-export default Page;
+export default Component;

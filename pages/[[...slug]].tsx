@@ -4,7 +4,6 @@ import React from "react";
 
 import { Page } from "Components";
 import { getPageRoutes } from "Server/GetPageRoutes";
-import { recursiveDirectorySearch } from "Server/RecursiveDirectorySearch";
 import { ResultsGetPageRoutes } from "Server/ResultTypes";
 
 type StaticProps = ResultsGetPageRoutes & {
@@ -14,9 +13,10 @@ type StaticProps = ResultsGetPageRoutes & {
 const DynamicPage = ({ slug, paths }: StaticProps) => {
 	const ComponentImport = require(`Pages/${slug}`);
 	const title = ComponentImport.title ?? "Untitled";
+	const Component = ComponentImport.default ?? (() => <div>Not Found</div>);
 	return (
 		<Page {...{ title, paths }}>
-			<ComponentImport.default />
+			<Component />
 		</Page>
 	);
 };

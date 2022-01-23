@@ -2,7 +2,7 @@ import { Container } from "Components";
 
 export const title = "Home";
 
-const Page = () => {
+const Component = () => {
 	return (
 		<Container>
 			<p>Click on a route to the left...</p>
@@ -10,4 +10,4 @@ const Page = () => {
 	);
 };
 
-export default Page;
+export default Component;
