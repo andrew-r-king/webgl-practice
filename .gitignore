@@ -9,3 +9,7 @@ yarn.lock
 
 .DS_Store
 .env*
+
+/public/cuon-utils.js
+/public/webgl-debug.js
+/public/webgl-utils.js

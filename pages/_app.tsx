@@ -31,13 +31,12 @@ const Main = ({ Component, pageProps }: Props) => {
 		Router.events.on("routeChangeError", prog.finish);
 
 		setProgress(prog);
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
 			<BaseStyle />
 			<Component {...pageProps} />
-			{/* Modal */}
 		</>
 	);
 };

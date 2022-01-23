@@ -16,7 +16,7 @@ const NotFoundPage = (props: Props) => {
 	);
 };
 
-export const getStaticProps = async (ctx: GetStaticPropsContext) => {
+export const getStaticProps = async (_ctx: GetStaticPropsContext) => {
 	const props = await getPageRoutes();
 	return {
 		props: {

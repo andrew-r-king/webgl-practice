@@ -39,9 +39,6 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 		throw new Error("Params not found");
 	}
 
-	// console.log(ctx.params);
-
-	// const { slug: slugRaw } = ctx.params;
 	const { slug: slugRaw } = ctx.params;
 
 	let slug: string = path.join(typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");

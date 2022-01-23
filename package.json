@@ -10,6 +10,7 @@
 	"alias": {
 		"Components": "./src/Components",
 		"HighComponents": "./src/HighComponents",
+		"GL": "./src/GL",
 		"Hooks": "./src/Hooks",
 		"Pages": "./src/Pages",
 		"Server": "./src/Server",
