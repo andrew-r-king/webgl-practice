@@ -60,16 +60,14 @@ const createProgram = (gl: WebGLContext, vshader: string, fshader: string): Opti
 	return program;
 };
 
-const initShaders = (gl: WebGLContext, vshader: string, fshader: string): boolean => {
+const initShaders = (gl: WebGLContext, vshader: string, fshader: string): Optional<WebGLProgram> => {
 	const program = createProgram(gl, vshader, fshader);
 	if (!program) {
-		console.error(`Failed to create program`);
-		return false;
+		throw new Error(`Failed to create program to initialize shaders.`);
 	}
 
 	gl.useProgram(program);
-
-	return true;
+	return program;
 };
 
 export { initShaders };

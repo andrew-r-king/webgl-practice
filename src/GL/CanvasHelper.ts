@@ -1,7 +1,19 @@
 import { Optional } from "@andrew-r-king/react-kitchen";
 
+const glErrors = {
+	programNotFound: (): Error => {
+		return new Error("Critical: GL Shader program not found");
+	},
+	invalidAttribLocation: (): Error => {
+		return new Error("Error: Invalid attribute location");
+	},
+};
+
 export type FlatContext = CanvasRenderingContext2D;
-export type WebGLContext = WebGL2RenderingContext;
+export type WebGLContext = WebGL2RenderingContext & {
+	errors: typeof glErrors;
+	program?: WebGLProgram;
+};
 
 const create2DContextImpl = (canvas: HTMLCanvasElement, attributes?: CanvasRenderingContext2DSettings) => {
 	const name: string = "2d";
@@ -24,6 +36,7 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 		} catch {}
 
 		if (!!context) {
+			context.errors = glErrors;
 			console.log(`Using context: ${name}`);
 			break;
 		}

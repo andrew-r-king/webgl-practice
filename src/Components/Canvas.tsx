@@ -11,11 +11,11 @@ type Props = {
 	height?: number;
 	onLoad2D?: (ctx: FlatContext) => void;
 	onLoad3D?: (gl: WebGLContext) => void;
-	vertexShader?: string;
-	fragmentShader?: string;
+	vert?: string;
+	frag?: string;
 };
 
-const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vertexShader, fragmentShader }: Props) => {
+const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vert, frag }: Props) => {
 	const [error, setError] = useState<Optional<string>>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -24,13 +24,17 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vertexShader, fragmentS
 			if (!!onLoad3D) {
 				let gl = CanvasHelper.create3DContext(canvasRef.current);
 				if (!!gl) {
-					if (!!vertexShader && fragmentShader) {
-						if (!initShaders(gl, vertexShader, fragmentShader)) {
-							setError("Failed to initialize shaders.");
-							return;
+					try {
+						if (!!vert && !!frag) {
+							let program = initShaders(gl, vert, frag);
+							if (!!program) {
+								gl.program = program;
+							}
 						}
+						onLoad3D(gl);
+					} catch (err: any) {
+						setError(err?.message ?? "Unknown error");
 					}
-					onLoad3D(gl);
 				} else {
 					setError(CanvasHelper.lastError);
 				}
@@ -43,10 +47,19 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vertexShader, fragmentS
 				}
 			}
 		}
-	}, [canvasRef.current, onLoad2D, onLoad3D, vertexShader, fragmentShader, id]);
+	}, [canvasRef.current, onLoad2D, onLoad3D, vert, frag, id]);
 
 	if (!!error) {
-		return <div>{error}</div>;
+		return (
+			<ErrorMessage
+				style={{
+					width,
+					height: height ?? width,
+				}}
+			>
+				{error}
+			</ErrorMessage>
+		);
 	}
 
 	return (
@@ -76,4 +89,11 @@ export { Canvas, BasicCanvas };
 const Styles = styled.canvas`
 	display: block;
 	background: #fff;
+`;
+
+const ErrorMessage = styled.div`
+	display: block;
+	background: #fff;
+	color: red;
+	padding: 2rem;
 `;

@@ -1,6 +1,7 @@
 import { BasicCanvas } from "Components";
+import { WebGLContext } from "GL";
 
-export const title = "Ch02: Hello Point";
+export const title = "Ch02: Hello Point (1)";
 
 /*
 	Notes:
@@ -13,29 +14,25 @@ export const title = "Ch02: Hello Point";
 
 */
 
-const VSHADER_SOURCE: string = `void main() {
+const vert: string = `void main() {
 	gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
 	gl_PointSize = 10.0;
 }`;
 
-const FSHADER_SOURCE: string = `void main() {
+const frag: string = `void main() {
 	gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }`;
 
+const onLoad3D = (gl: WebGLContext): void => {
+	if (!gl.program) throw gl.errors.programNotFound();
+
+	gl.clearColor(0.0, 0.0, 0.0, 1.0);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+	gl.drawArrays(gl.POINTS, 0, 1);
+};
+
 const Component = () => {
-	return (
-		<BasicCanvas
-			vertexShader={VSHADER_SOURCE}
-			fragmentShader={FSHADER_SOURCE}
-			onLoad3D={(gl) => {
-				gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
-				gl.clear(gl.COLOR_BUFFER_BIT);
-
-				gl.drawArrays(gl.POINTS, 0, 1);
-			}}
-		/>
-	);
+	return <BasicCanvas {...{ vert, frag, onLoad3D }} />;
 };
 
 export default Component;
