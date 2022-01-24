@@ -4,14 +4,25 @@ const glErrors = {
 	programNotFound: (): Error => {
 		return new Error("Critical: GL Shader program not found");
 	},
+	genericLessThanZero: (): Error => {
+		return new Error("Error: Invalid attribute location");
+	},
 	invalidAttribLocation: (): Error => {
 		return new Error("Error: Invalid attribute location");
 	},
 };
 
+const checkError = (result: number, ...args: any[]): number => {
+	if (result < 0) {
+		throw glErrors.genericLessThanZero();
+	}
+	return result;
+};
+
 export type FlatContext = CanvasRenderingContext2D;
 export type WebGLContext = WebGL2RenderingContext & {
 	errors: typeof glErrors;
+	check: typeof checkError;
 	program?: WebGLProgram;
 };
 
@@ -36,6 +47,7 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 		} catch {}
 
 		if (!!context) {
+			context.check = checkError;
 			context.errors = glErrors;
 			console.log(`Using context: ${name}`);
 			break;
