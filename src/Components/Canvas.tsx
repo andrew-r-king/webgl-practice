@@ -16,7 +16,7 @@ type Props = {
 };
 
 const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vert, frag }: Props) => {
-	const [error, setError] = useState<Optional<string>>(null);
+	const [error, setError] = useState<Optional<Error>>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
 	useEffect(() => {
@@ -33,7 +33,7 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vert, frag }: Props) =>
 						}
 						onLoad3D(gl);
 					} catch (err: any) {
-						setError(err?.message ?? "Unknown error");
+						setError(err);
 					}
 				} else {
 					setError(CanvasHelper.lastError);
@@ -50,6 +50,13 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vert, frag }: Props) =>
 	}, [canvasRef.current, onLoad2D, onLoad3D, vert, frag, id]);
 
 	if (!!error) {
+		let stack = (error.stack ?? "")?.split("\n");
+		for (const [i, line] of Object.entries(stack)) {
+			if (line.startsWith("Canvas")) {
+				stack.length = Number(i);
+				break;
+			}
+		}
 		return (
 			<ErrorMessage
 				style={{
@@ -57,7 +64,10 @@ const Canvas = ({ id, width, height, onLoad2D, onLoad3D, vert, frag }: Props) =>
 					height: height ?? width,
 				}}
 			>
-				{error}
+				{error.message}
+				{stack.map((line, i) => (
+					<span key={i}>{line}</span>
+				))}
 			</ErrorMessage>
 		);
 	}
@@ -96,4 +106,10 @@ const ErrorMessage = styled.div`
 	background: #fff;
 	color: red;
 	padding: 2rem;
+	overflow: hidden;
+
+	> span {
+		display: block;
+		font-size: 0.75rem;
+	}
 `;

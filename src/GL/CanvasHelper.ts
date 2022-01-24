@@ -4,17 +4,39 @@ const glErrors = {
 	programNotFound: (): Error => {
 		return new Error("Critical: GL Shader program not found");
 	},
-	genericLessThanZero: (): Error => {
-		return new Error("Error: Invalid attribute location");
+	checkAnyError: (gl: WebGLContext, result: number): Optional<Error> => {
+		if (result > 0) {
+			const glErr = gl.getError();
+			if (glErr !== gl.NO_ERROR) {
+				const errorEntries = {
+					[gl.NO_ERROR]: "NO_ERROR",
+					[gl.INVALID_ENUM]: "INVALID_ENUM",
+					[gl.INVALID_VALUE]: "INVALID_VALUE",
+					[gl.INVALID_OPERATION]: "INVALID_OPERATION",
+					[gl.INVALID_FRAMEBUFFER_OPERATION]: "INVALID_FRAMEBUFFER_OPERATION",
+					[gl.OUT_OF_MEMORY]: "OUT_OF_MEMORY",
+					[gl.CONTEXT_LOST_WEBGL]: "CONTEXT_LOST_WEBGL",
+				};
+				if (!!errorEntries[result]) {
+					const name = errorEntries[result];
+					return new Error(`Error: WebGL getError() returned with ${name}`);
+				}
+			}
+		} else if (result < 0) {
+			return new Error("Error: method returned < 0");
+		}
+
+		return null;
 	},
 	invalidAttribLocation: (): Error => {
 		return new Error("Error: Invalid attribute location");
 	},
 };
 
-const checkError = (result: number, ...args: any[]): number => {
-	if (result < 0) {
-		throw glErrors.genericLessThanZero();
+const checkError = (gl: WebGLContext, result: number): number => {
+	const error = glErrors.checkAnyError(gl, result);
+	if (!!error) {
+		throw error;
 	}
 	return result;
 };
@@ -22,7 +44,7 @@ const checkError = (result: number, ...args: any[]): number => {
 export type FlatContext = CanvasRenderingContext2D;
 export type WebGLContext = WebGL2RenderingContext & {
 	errors: typeof glErrors;
-	check: typeof checkError;
+	check: (result: number) => number;
 	program?: WebGLProgram;
 };
 
@@ -47,7 +69,7 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 		} catch {}
 
 		if (!!context) {
-			context.check = checkError;
+			context.check = (result: number) => checkError(context!, result);
 			context.errors = glErrors;
 			console.log(`Using context: ${name}`);
 			break;
@@ -58,13 +80,16 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 };
 
 class CanvasHelper {
-	static lastError: Optional<string> = null;
+	static lastError: Optional<Error> = null;
 
 	static create2DContext = (canvas: HTMLCanvasElement, attributes?: CanvasRenderingContext2DSettings) => {
 		try {
 			return create2DContextImpl(canvas, attributes);
 		} catch (err: any) {
-			this.lastError = err.message ?? "Unkown error setting up WebGL";
+			this.lastError = {
+				...err,
+				message: err.message ?? "Unkown error setting up WebGL",
+			};
 			console.error(err);
 			return null;
 		}
@@ -87,7 +112,10 @@ class CanvasHelper {
 			}
 			return context;
 		} catch (err: any) {
-			this.lastError = err.message ?? "Unkown error setting up WebGL";
+			this.lastError = {
+				...err,
+				message: err.message ?? "Unkown error setting up WebGL",
+			};
 			console.error(err);
 			return null;
 		}
