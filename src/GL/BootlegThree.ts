@@ -9,6 +9,11 @@ export type CanvasMouseEvent = React.MouseEvent & {
 };
 
 export interface BootlegThree {
+	width?: number;
+	height?: number;
+	vert?: string;
+	frag?: string;
+
 	onLoad?: (gl: WebGLContext) => void;
 	onDraw?: (gl: WebGLContext) => void;
 	onMouseDown?: (ev: CanvasMouseEvent, gl: WebGLContext) => void;

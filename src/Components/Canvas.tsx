@@ -88,17 +88,7 @@ const Canvas = React.forwardRef(
 	}
 );
 
-type StandardCanvasProps = Omit<Props, "id" | "width"> & {
-	width?: number;
-};
-
-const BasicCanvas = React.forwardRef(
-	({ width, ...canvasProps }: StandardCanvasProps, ref: ForwardedRef<HTMLCanvasElement>) => {
-		return <Canvas id="main-canvas" ref={ref} {...canvasProps} width={width ?? 400} />;
-	}
-);
-
-export { Canvas, BasicCanvas };
+export { Canvas };
 
 const Styles = styled.canvas`
 	display: block;

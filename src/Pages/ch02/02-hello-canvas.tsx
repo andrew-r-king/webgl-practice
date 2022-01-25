@@ -1,6 +1,4 @@
-import { useState } from "react";
-
-import { BasicCanvas } from "Components";
+import { Canvas } from "Components";
 import { BootlegThree, WebGLContext } from "GL";
 import { useWebGL } from "Hooks";
 
@@ -15,7 +13,7 @@ class Program implements BootlegThree {
 
 const Component = () => {
 	const props = useWebGL(Program);
-	return <BasicCanvas {...props} />;
+	return <Canvas {...props} />;
 };
 
 export default Component;

@@ -10,9 +10,12 @@ type OutProps = {
 	error: Optional<Error>;
 	program2d: BootlegTwo;
 	ctx: Optional<FlatContext>;
+	width: number;
+	height: number;
+	id: string;
 };
 
-function useCanvas<T extends BootlegTwo>(program: ClassType<T>): OutProps {
+function useCanvas<T extends BootlegTwo>(program: ClassType<T>, id: string = "main-canvas"): OutProps {
 	const ref = useRef<HTMLCanvasElement>(null);
 	const [program2d] = useState<T>(new program());
 	const [error, setError] = useState<Optional<Error>>(null);
@@ -31,7 +34,15 @@ function useCanvas<T extends BootlegTwo>(program: ClassType<T>): OutProps {
 		}
 	}, [ref.current]);
 
-	return { ref, error, program2d, ctx };
+	return {
+		ref,
+		error,
+		program2d,
+		ctx,
+		width: program2d.width ?? 400,
+		height: program2d.height ?? 400,
+		id,
+	};
 }
 
 export { useCanvas };

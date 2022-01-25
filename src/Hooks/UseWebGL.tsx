@@ -9,9 +9,12 @@ type OutProps = {
 	error: Optional<Error>;
 	program3d: BootlegThree;
 	gl: Optional<WebGLContext>;
+	width: number;
+	height: number;
+	id: string;
 };
 
-function useWebGL<T extends BootlegThree>(program: ClassType<T>, vert?: string, frag?: string): OutProps {
+function useWebGL<T extends BootlegThree>(program: ClassType<T>, id: string = "main-canvas"): OutProps {
 	const ref = useRef<HTMLCanvasElement>(null);
 	const [program3d] = useState<T>(new program());
 	const [error, setError] = useState<Optional<Error>>(null);
@@ -22,8 +25,8 @@ function useWebGL<T extends BootlegThree>(program: ClassType<T>, vert?: string, 
 			let context = CanvasHelper.create3DContext(ref.current);
 			if (!!context) {
 				try {
-					if (!!vert && !!frag) {
-						let program = initShaders(context, vert, frag);
+					if (!!program3d.vert && !!program3d.frag) {
+						let program = initShaders(context, program3d.vert, program3d.frag);
 						if (!!program) {
 							context.program = program;
 						}
@@ -40,7 +43,15 @@ function useWebGL<T extends BootlegThree>(program: ClassType<T>, vert?: string, 
 		}
 	}, [ref.current]);
 
-	return { ref, error, program3d, gl };
+	return {
+		ref,
+		error,
+		program3d,
+		gl,
+		width: program3d.width ?? 400,
+		height: program3d.height ?? 400,
+		id,
+	};
 }
 
 export { useWebGL };

@@ -1,6 +1,4 @@
-import { useState } from "react";
-
-import { BasicCanvas } from "Components";
+import { Canvas } from "Components";
 import { FlatContext } from "GL";
 import { BootlegTwo } from "GL/BootlegTwo";
 import { useCanvas } from "Hooks";
@@ -16,7 +14,7 @@ class Program implements BootlegTwo {
 
 const Component = () => {
 	const props = useCanvas(Program);
-	return <BasicCanvas {...props} />;
+	return <Canvas {...props} />;
 };
 
 export default Component;

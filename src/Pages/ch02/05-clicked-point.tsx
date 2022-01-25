@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { BasicCanvas } from "Components";
+import { Canvas } from "Components";
 import { BootlegThree, CanvasMouseEvent, WebGLContext } from "GL";
 import { useWebGL } from "Hooks";
 
@@ -27,6 +27,9 @@ const frag: string = `void main() {
 }`;
 
 class Program implements BootlegThree {
+	vert = vert;
+	frag = frag;
+
 	position: number = 0;
 	pointSize: number = 0;
 	points: number[] = [];
@@ -77,8 +80,8 @@ class Program implements BootlegThree {
 }
 
 const Component = () => {
-	const props = useWebGL(Program, vert, frag);
-	return <BasicCanvas {...props} />;
+	const props = useWebGL(Program);
+	return <Canvas {...props} />;
 };
 
 export default Component;
