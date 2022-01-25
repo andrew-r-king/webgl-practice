@@ -53,7 +53,7 @@ class Program implements BootlegThree {
 		}
 	};
 
-	onMouseDown = (ev: CanvasMouseEvent, gl: Optional<WebGLContext>): void => {
+	onMouseMove = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
 		if (!gl) return;
 
 		this.points.push(ev.normalX);
@@ -65,9 +65,9 @@ class Program implements BootlegThree {
 
 const Component = () => {
 	const [impl] = useState<Program>(new Program());
-	const [props, gl] = useWebGL(impl, vert, frag);
+	const props = useWebGL(impl, vert, frag);
 
-	return <BasicCanvas {...props} onMouseDown={(ev) => impl.onMouseDown(ev, gl)} />;
+	return <BasicCanvas {...props} />;
 };
 
 export default Component;

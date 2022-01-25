@@ -1,24 +1,52 @@
-import React, { ForwardedRef } from "react";
+import React, { ForwardedRef, useCallback } from "react";
 import styled from "styled-components";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-export type CanvasMouseEvent = React.MouseEvent & {
-	target: HTMLCanvasElement;
-	normalX: number;
-	normalY: number;
-};
+import { BootlegThree, CanvasMouseEvent, FlatContext, WebGLContext } from "GL";
+import { BootlegTwo } from "GL/BootlegTwo";
 
 type Props = {
 	id: string;
 	width: number;
 	height?: number;
 	error?: Optional<Error>;
-	onMouseDown?: (ev: CanvasMouseEvent) => void;
+	program2d?: BootlegTwo;
+	program3d?: BootlegThree;
+	ctx?: Optional<FlatContext>;
+	gl?: Optional<WebGLContext>;
+};
+
+const evMouse = (
+	ev: React.MouseEvent,
+	id: string,
+	gl?: Optional<WebGLContext>,
+	func?: (ev: CanvasMouseEvent, gl: WebGLContext) => void
+): void => {
+	if (!!func && !!gl) {
+		ev.preventDefault();
+
+		const target = (document.getElementById(id) as HTMLCanvasElement)!;
+
+		let normalX = ev.clientX;
+		let normalY = ev.clientY;
+		const rect = target.getBoundingClientRect();
+
+		normalX = (normalX - rect.left - target.width / 2) / (target.width / 2);
+		normalY = (target.height / 2 - (normalY - rect.top)) / (target.height / 2);
+
+		const event: CanvasMouseEvent = {
+			...ev,
+			target,
+			normalX,
+			normalY,
+		};
+		func(event, gl);
+	}
 };
 
 const Canvas = React.forwardRef(
-	({ id, error, width, height, onMouseDown }: Props, ref: ForwardedRef<HTMLCanvasElement>) => {
+	({ id, error, width, height, program3d, gl }: Props, ref: ForwardedRef<HTMLCanvasElement>) => {
 		if (!!error) {
 			let stack = (error.stack ?? "")?.split("\n");
 			for (const [i, line] of Object.entries(stack)) {
@@ -48,28 +76,13 @@ const Canvas = React.forwardRef(
 				id={id}
 				width={width}
 				height={height ?? width}
-				onMouseDown={(ev) => {
-					if (!!onMouseDown) {
-						ev.preventDefault();
-
-						const target = (document.getElementById(id) as HTMLCanvasElement)!;
-
-						let normalX = ev.clientX;
-						let normalY = ev.clientY;
-						const rect = target.getBoundingClientRect();
-
-						normalX = (normalX - rect.left - target.width / 2) / (target.width / 2);
-						normalY = (target.height / 2 - (normalY - rect.top)) / (target.height / 2);
-
-						const event: CanvasMouseEvent = {
-							...ev,
-							target,
-							normalX,
-							normalY,
-						};
-						onMouseDown(event);
-					}
-				}}
+				{...(!!program3d
+					? {
+							onMouseDown: (ev) => evMouse(ev, id, gl, program3d.onMouseDown),
+							onMouseUp: (ev) => evMouse(ev, id, gl, program3d.onMouseUp),
+							onMouseMove: (ev) => evMouse(ev, id, gl, program3d.onMouseMove),
+					  }
+					: undefined)}
 			>
 				This browser does not support the {'"'}canvas{'"'} HTML5 tag.
 			</Styles>

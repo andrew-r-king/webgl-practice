@@ -7,9 +7,11 @@ import { BootlegThree, CanvasHelper, initShaders, WebGLContext } from "GL";
 type OutProps = {
 	ref: RefObject<HTMLCanvasElement>;
 	error: Optional<Error>;
+	program3d: BootlegThree;
+	gl: Optional<WebGLContext>;
 };
 
-const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): [OutProps, Optional<WebGLContext>] => {
+const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): OutProps => {
 	const ref = useRef<HTMLCanvasElement>(null);
 	const [error, setError] = useState<Optional<Error>>(null);
 	const [gl, setGL] = useState<Optional<WebGLContext>>(null);
@@ -37,7 +39,7 @@ const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): [OutProps, 
 		}
 	}, [ref.current]);
 
-	return [{ ref, error }, gl];
+	return { ref, error, program3d: impl, gl };
 };
 
 export { useWebGL };

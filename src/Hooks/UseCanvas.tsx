@@ -8,9 +8,11 @@ import { BootlegTwo } from "GL/BootlegTwo";
 type OutProps = {
 	ref: RefObject<HTMLCanvasElement>;
 	error: Optional<Error>;
+	program2d: BootlegTwo;
+	ctx: Optional<FlatContext>;
 };
 
-const useCanvas = (impl: BootlegTwo): [OutProps, Optional<FlatContext>] => {
+const useCanvas = (impl: BootlegTwo): OutProps => {
 	const ref = useRef<HTMLCanvasElement>(null);
 	const [error, setError] = useState<Optional<Error>>(null);
 	const [ctx, setCtx] = useState<Optional<FlatContext>>(null);
@@ -28,7 +30,7 @@ const useCanvas = (impl: BootlegTwo): [OutProps, Optional<FlatContext>] => {
 		}
 	}, [ref.current]);
 
-	return [{ ref, error }, ctx];
+	return { ref, error, program2d: impl, ctx };
 };
 
 export { useCanvas };

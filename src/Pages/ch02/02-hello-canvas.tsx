@@ -15,7 +15,8 @@ class Program implements BootlegThree {
 
 const Component = () => {
 	const [impl] = useState<Program>(new Program());
-	const [props, gl] = useWebGL(impl);
+	const props = useWebGL(impl);
+
 	return <BasicCanvas {...props} />;
 };
 
