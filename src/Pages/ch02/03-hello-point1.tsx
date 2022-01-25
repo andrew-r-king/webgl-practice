@@ -1,5 +1,6 @@
 import { BasicCanvas } from "Components";
 import { WebGLContext } from "GL";
+import { useWebGL } from "Hooks";
 
 export const title = "Ch02: Hello Point (1)";
 
@@ -23,7 +24,7 @@ const frag: string = `void main() {
 	gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }`;
 
-const onLoad3D = (gl: WebGLContext): void => {
+const onLoad = (gl: WebGLContext): void => {
 	if (!gl.program) throw gl.errors.programNotFound();
 
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -32,7 +33,15 @@ const onLoad3D = (gl: WebGLContext): void => {
 };
 
 const Component = () => {
-	return <BasicCanvas {...{ vert, frag, onLoad3D }} />;
+	const [ref, gl, error] = useWebGL(onLoad, vert, frag);
+	return (
+		<BasicCanvas
+			{...{
+				ref,
+				error,
+			}}
+		/>
+	);
 };
 
 export default Component;

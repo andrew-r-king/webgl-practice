@@ -1,6 +1,6 @@
 import { AppProps } from "next/app";
 import Router from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 import ProgressBar from "@badrap/bar-of-progress";
