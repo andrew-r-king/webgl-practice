@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
-
-import { BasicCanvas, CanvasMouseEvent } from "Components";
-import { BootlegThree, WebGLContext } from "GL";
+import { BasicCanvas } from "Components";
+import { BootlegThree, CanvasMouseEvent, WebGLContext } from "GL";
 import { useWebGL } from "Hooks";
 
 export const title = "Ch02: Clicked Point";
@@ -53,20 +51,33 @@ class Program implements BootlegThree {
 		}
 	};
 
-	onMouseDown = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
-		if (!gl) return;
+	mouseDown: boolean = false;
 
+	addPixelFromMouse = (ev: CanvasMouseEvent, gl: WebGLContext) => {
 		this.points.push(ev.normalX);
 		this.points.push(ev.normalY);
 
 		this.onDraw(gl);
 	};
+
+	onMouseDown = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
+		this.mouseDown = true;
+		this.addPixelFromMouse(ev, gl);
+	};
+
+	onMouseUp = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
+		this.mouseDown = false;
+	};
+
+	onMouseMove = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
+		if (this.mouseDown) {
+			this.addPixelFromMouse(ev, gl);
+		}
+	};
 }
 
 const Component = () => {
-	const [impl] = useState<Program>(new Program());
-	const props = useWebGL(impl, vert, frag);
-
+	const props = useWebGL(Program, vert, frag);
 	return <BasicCanvas {...props} />;
 };
 

@@ -15,8 +15,7 @@ class Program implements BootlegTwo {
 }
 
 const Component = () => {
-	const [impl] = useState<Program>(new Program());
-	const props = useCanvas(impl);
+	const props = useCanvas(Program);
 	return <BasicCanvas {...props} />;
 };
 

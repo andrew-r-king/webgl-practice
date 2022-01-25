@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
 
 import { CanvasHelper, FlatContext } from "GL";
 import { BootlegTwo } from "GL/BootlegTwo";
@@ -12,8 +12,9 @@ type OutProps = {
 	ctx: Optional<FlatContext>;
 };
 
-const useCanvas = (impl: BootlegTwo): OutProps => {
+function useCanvas<T extends BootlegTwo>(program: ClassType<T>): OutProps {
 	const ref = useRef<HTMLCanvasElement>(null);
+	const [program2d] = useState<T>(new program());
 	const [error, setError] = useState<Optional<Error>>(null);
 	const [ctx, setCtx] = useState<Optional<FlatContext>>(null);
 
@@ -21,8 +22,8 @@ const useCanvas = (impl: BootlegTwo): OutProps => {
 		if (!!ref.current && ctx === null) {
 			let context = CanvasHelper.create2DContext(ref.current);
 			if (!!context) {
-				impl.onLoad?.(context);
-				impl.onDraw?.(context);
+				program2d.onLoad?.(context);
+				program2d.onDraw?.(context);
 				setCtx(context);
 			} else {
 				setError(CanvasHelper.lastError);
@@ -30,7 +31,7 @@ const useCanvas = (impl: BootlegTwo): OutProps => {
 		}
 	}, [ref.current]);
 
-	return { ref, error, program2d: impl, ctx };
-};
+	return { ref, error, program2d, ctx };
+}
 
 export { useCanvas };

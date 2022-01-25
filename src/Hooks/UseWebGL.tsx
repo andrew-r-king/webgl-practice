@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
 
 import { BootlegThree, CanvasHelper, initShaders, WebGLContext } from "GL";
 
@@ -11,8 +11,9 @@ type OutProps = {
 	gl: Optional<WebGLContext>;
 };
 
-const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): OutProps => {
+function useWebGL<T extends BootlegThree>(program: ClassType<T>, vert?: string, frag?: string): OutProps {
 	const ref = useRef<HTMLCanvasElement>(null);
+	const [program3d] = useState<T>(new program());
 	const [error, setError] = useState<Optional<Error>>(null);
 	const [gl, setGL] = useState<Optional<WebGLContext>>(null);
 
@@ -27,8 +28,8 @@ const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): OutProps =>
 							context.program = program;
 						}
 					}
-					impl.onLoad?.(context);
-					impl.onDraw?.(context);
+					program3d.onLoad?.(context);
+					program3d.onDraw?.(context);
 					setGL(context);
 				} catch (err: any) {
 					setError(err);
@@ -39,7 +40,7 @@ const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): OutProps =>
 		}
 	}, [ref.current]);
 
-	return { ref, error, program3d: impl, gl };
-};
+	return { ref, error, program3d, gl };
+}
 
 export { useWebGL };
