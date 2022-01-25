@@ -25,8 +25,8 @@ const useWebGL = (impl: BootlegThree, vert?: string, frag?: string): [OutProps, 
 							context.program = program;
 						}
 					}
-					impl.onLoad(context);
-					impl.onDraw(context);
+					impl.onLoad?.(context);
+					impl.onDraw?.(context);
 					setGL(context);
 				} catch (err: any) {
 					setError(err);

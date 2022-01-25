@@ -26,7 +26,7 @@ const frag: string = `void main() {
 	gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }`;
 
-class ClickedPoint extends BootlegThree {
+class Program implements BootlegThree {
 	position: number = 0;
 	pointSize: number = 0;
 
@@ -49,7 +49,7 @@ class ClickedPoint extends BootlegThree {
 }
 
 const Component = () => {
-	const [impl] = useState<ClickedPoint>(new ClickedPoint());
+	const [impl] = useState<Program>(new Program());
 	const [props, gl] = useWebGL(impl, vert, frag);
 
 	return <BasicCanvas {...props} />;

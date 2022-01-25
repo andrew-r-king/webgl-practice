@@ -26,7 +26,7 @@ const frag: string = `void main() {
 	gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }`;
 
-class HelloPoint2 extends BootlegThree {
+class Program implements BootlegThree {
 	position: number = 0;
 	pointSize: number = 0;
 
@@ -39,6 +39,7 @@ class HelloPoint2 extends BootlegThree {
 		this.pointSize = gl.check(gl.getAttribLocation, gl.program, "a_PointSize");
 		gl.vertexAttrib1f(this.pointSize, 10.0);
 	};
+
 	onDraw = (gl: WebGLContext): void => {
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
@@ -47,7 +48,7 @@ class HelloPoint2 extends BootlegThree {
 }
 
 const Component = () => {
-	const [impl] = useState<HelloPoint2>(new HelloPoint2());
+	const [impl] = useState<Program>(new Program());
 	const [props] = useWebGL(impl, vert, frag);
 
 	return <BasicCanvas {...props} />;

@@ -1,8 +1,6 @@
 import { WebGLContext } from "./CanvasHelper";
 
-abstract class BootlegThree {
-	abstract onLoad(gl: WebGLContext): void;
-	abstract onDraw(gl: WebGLContext): void;
+export interface BootlegThree {
+	onLoad?: (gl: WebGLContext) => void;
+	onDraw?: (gl: WebGLContext) => void;
 }
-
-export { BootlegThree };

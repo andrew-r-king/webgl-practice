@@ -6,12 +6,7 @@ import { useWebGL } from "Hooks";
 
 export const title = "Ch02: Hello Canvas";
 
-class HelloCanvas extends BootlegThree {
-	position: number = 0;
-	pointSize: number = 0;
-
-	onLoad = (_gl: WebGLContext): void => {};
-
+class Program implements BootlegThree {
 	onDraw = (gl: WebGLContext): void => {
 		gl.clearColor(0.1, 0.7, 0.3, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
@@ -19,7 +14,7 @@ class HelloCanvas extends BootlegThree {
 }
 
 const Component = () => {
-	const [impl] = useState<HelloCanvas>(new HelloCanvas());
+	const [impl] = useState<Program>(new Program());
 	const [props, gl] = useWebGL(impl);
 	return <BasicCanvas {...props} />;
 };
