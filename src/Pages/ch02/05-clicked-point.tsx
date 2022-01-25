@@ -56,9 +56,13 @@ class Program implements BootlegThree {
 
 	mouseDown: boolean = false;
 
-	addPixelFromMouse = (ev: CanvasMouseEvent, gl: WebGLContext) => {
+	private kPointMax: number = 100;
+	private addPixelFromMouse = (ev: CanvasMouseEvent, gl: WebGLContext) => {
 		this.points.push(ev.normalX);
 		this.points.push(ev.normalY);
+		while (this.points.length > this.kPointMax * 2) {
+			this.points.shift();
+		}
 
 		this.onDraw(gl);
 	};
