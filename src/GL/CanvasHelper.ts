@@ -54,7 +54,7 @@ const create2DContextImpl = (canvas: HTMLCanvasElement, attributes?: CanvasRende
 
 	let context: Optional<CanvasRenderingContext2D> = canvas.getContext(name, attributes) as any;
 	if (!!context) {
-		console.log(`Using context: ${name}`);
+		// console.log(`Using context: ${name}`);
 	}
 
 	return context;
@@ -79,7 +79,7 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 				return result;
 			};
 			context.errors = glErrors;
-			console.log(`Using context: ${name}`);
+			// console.log(`Using context: ${name}`);
 			break;
 		}
 	}
