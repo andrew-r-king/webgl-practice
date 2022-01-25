@@ -25,7 +25,7 @@ const frag: string = `void main() {
 const onLoad3D = (gl: WebGLContext): void => {
 	if (!gl.program) throw gl.errors.programNotFound();
 
-	const a_Position = gl.check(gl.getAttribLocation(gl.program, "a_Position"));
+	const a_Position = gl.check(gl.getAttribLocation, gl.program, "a_Position");
 
 	gl.vertexAttrib3f(a_Position, 0.0, 0.5, 0.0);
 

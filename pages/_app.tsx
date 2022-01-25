@@ -7,32 +7,23 @@ import ProgressBar from "@badrap/bar-of-progress";
 
 import { BaseStyle } from "Components";
 
+let progress: Optional<ProgressBar> = null;
+if (progress === null) {
+	progress = new ProgressBar({
+		size: "0.25rem",
+		color: "lightblue",
+		className: "router-progress-bar",
+		delay: 100,
+	});
+
+	Router.events.on("routeChangeStart", progress.start);
+	Router.events.on("routeChangeComplete", progress.finish);
+	Router.events.on("routeChangeError", progress.finish);
+}
+
 type Props = AppProps;
 
 const Main = ({ Component, pageProps }: Props) => {
-	const [progress, setProgress] = useState<Optional<ProgressBar>>(null);
-
-	useEffect(() => {
-		if (!!progress) {
-			Router.events.off("routeChangeStart", progress.start);
-			Router.events.off("routeChangeComplete", progress.finish);
-			Router.events.off("routeChangeError", progress.finish);
-		}
-
-		const prog = new ProgressBar({
-			size: "0.25rem",
-			color: "lightblue",
-			className: "router-progress-bar",
-			delay: 100,
-		});
-
-		Router.events.on("routeChangeStart", prog.start);
-		Router.events.on("routeChangeComplete", prog.finish);
-		Router.events.on("routeChangeError", prog.finish);
-
-		setProgress(prog);
-	}, []);
-
 	return (
 		<>
 			<BaseStyle />

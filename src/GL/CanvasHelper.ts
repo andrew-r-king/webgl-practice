@@ -4,47 +4,48 @@ const glErrors = {
 	programNotFound: (): Error => {
 		return new Error("Critical: GL Shader program not found");
 	},
-	checkAnyError: (gl: WebGLContext, result: number): Optional<Error> => {
-		if (result > 0) {
-			const glErr = gl.getError();
-			if (glErr !== gl.NO_ERROR) {
-				const errorEntries = {
-					[gl.NO_ERROR]: "NO_ERROR",
-					[gl.INVALID_ENUM]: "INVALID_ENUM",
-					[gl.INVALID_VALUE]: "INVALID_VALUE",
-					[gl.INVALID_OPERATION]: "INVALID_OPERATION",
-					[gl.INVALID_FRAMEBUFFER_OPERATION]: "INVALID_FRAMEBUFFER_OPERATION",
-					[gl.OUT_OF_MEMORY]: "OUT_OF_MEMORY",
-					[gl.CONTEXT_LOST_WEBGL]: "CONTEXT_LOST_WEBGL",
-				};
-				if (!!errorEntries[result]) {
-					const name = errorEntries[result];
-					return new Error(`Error: WebGL getError() returned with ${name}`);
-				}
-			}
-		} else if (result < 0) {
-			return new Error("Error: method returned < 0");
-		}
-
-		return null;
-	},
 	invalidAttribLocation: (): Error => {
 		return new Error("Error: Invalid attribute location");
 	},
 };
 
-const checkError = (gl: WebGLContext, result: number): number => {
-	const error = glErrors.checkAnyError(gl, result);
-	if (!!error) {
-		throw error;
+const checkError = (gl: WebGLContext, result: number, funcName?: string): Optional<Error> => {
+	if (result > 0) {
+		const glErr = gl.getError();
+		if (glErr !== gl.NO_ERROR) {
+			const errorEntries = {
+				[gl.NO_ERROR]: "NO_ERROR",
+				[gl.INVALID_ENUM]: "INVALID_ENUM",
+				[gl.INVALID_VALUE]: "INVALID_VALUE",
+				[gl.INVALID_OPERATION]: "INVALID_OPERATION",
+				[gl.INVALID_FRAMEBUFFER_OPERATION]: "INVALID_FRAMEBUFFER_OPERATION",
+				[gl.OUT_OF_MEMORY]: "OUT_OF_MEMORY",
+				[gl.CONTEXT_LOST_WEBGL]: "CONTEXT_LOST_WEBGL",
+			};
+			if (!!errorEntries[result]) {
+				const errName = errorEntries[result];
+				if (!!funcName) {
+					return new Error(`Error: WebGL getError() from method '${funcName}' returned with ${errName}`);
+				} else {
+					return new Error(`Error: WebGL getError() returned with ${errName}`);
+				}
+			}
+		}
+	} else if (result < 0) {
+		if (!!funcName) {
+			return new Error(`Error: method '${funcName}' returned < 0`);
+		} else {
+			return new Error("Error: method returned < 0");
+		}
 	}
-	return result;
+
+	return null;
 };
 
 export type FlatContext = CanvasRenderingContext2D;
 export type WebGLContext = WebGL2RenderingContext & {
 	errors: typeof glErrors;
-	check: (result: number) => number;
+	check: (func: (...args: any[]) => number, ...args: any[]) => number;
 	program?: WebGLProgram;
 };
 
@@ -69,7 +70,14 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 		} catch {}
 
 		if (!!context) {
-			context.check = (result: number) => checkError(context!, result);
+			context.check = function (func: (...args: any[]) => number, ...args: any[]) {
+				const result = func.call(this, ...args);
+				const error = checkError(context!, result, func.name);
+				if (!!error) {
+					throw error;
+				}
+				return result;
+			};
 			context.errors = glErrors;
 			console.log(`Using context: ${name}`);
 			break;
