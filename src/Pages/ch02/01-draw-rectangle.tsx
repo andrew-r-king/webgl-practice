@@ -10,8 +10,8 @@ const onLoad = (ctx: FlatContext): void => {
 };
 
 const Component = () => {
-	const [ref, ctx, error] = useCanvas(onLoad);
-	return <BasicCanvas {...{ ref, error }} />;
+	const [props, ctx] = useCanvas(onLoad);
+	return <BasicCanvas {...props} />;
 };
 
 export default Component;
