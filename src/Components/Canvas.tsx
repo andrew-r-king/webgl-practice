@@ -35,13 +35,11 @@ const evMouse = (
 		normalX = (normalX - rect.left - target.width / 2) / (target.width / 2);
 		normalY = (target.height / 2 - (normalY - rect.top)) / (target.height / 2);
 
-		const event: CanvasMouseEvent = {
-			...ev,
-			target,
-			normalX,
-			normalY,
-		};
-		func(event, gl);
+		ev.target = target;
+		(ev as CanvasMouseEvent).normalX = normalX;
+		(ev as CanvasMouseEvent).normalY = normalY;
+
+		func(ev as CanvasMouseEvent, gl);
 	}
 };
 
