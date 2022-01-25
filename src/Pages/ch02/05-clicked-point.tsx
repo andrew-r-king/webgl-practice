@@ -53,7 +53,7 @@ class Program implements BootlegThree {
 		}
 	};
 
-	onMouseMove = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
+	onMouseDown = (ev: CanvasMouseEvent, gl: WebGLContext): void => {
 		if (!gl) return;
 
 		this.points.push(ev.normalX);
