@@ -3,52 +3,64 @@ import styled from "styled-components";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-import { FlatContext, WebGLContext } from "GL";
+export type CanvasMouseEvent = React.MouseEvent & {
+	target?: HTMLCanvasElement;
+};
 
 type Props = {
 	id: string;
 	width: number;
 	height?: number;
 	error?: Optional<Error>;
+	onMouseDown?: (ev: CanvasMouseEvent) => void;
 };
 
-const Canvas = React.forwardRef(({ id, error, width, height }: Props, ref: ForwardedRef<HTMLCanvasElement>) => {
-	if (!!error) {
-		let stack = (error.stack ?? "")?.split("\n");
-		for (const [i, line] of Object.entries(stack)) {
-			if (line.startsWith("Canvas")) {
-				stack.length = Number(i);
-				break;
+const Canvas = React.forwardRef(
+	({ id, error, width, height, onMouseDown }: Props, ref: ForwardedRef<HTMLCanvasElement>) => {
+		if (!!error) {
+			let stack = (error.stack ?? "")?.split("\n");
+			for (const [i, line] of Object.entries(stack)) {
+				if (line.startsWith("Canvas")) {
+					stack.length = Number(i);
+					break;
+				}
 			}
+			return (
+				<ErrorMessage
+					style={{
+						width,
+						height: height ?? width,
+					}}
+				>
+					{error.message}
+					{stack.map((line, i) => (
+						<span key={i}>{line}</span>
+					))}
+				</ErrorMessage>
+			);
 		}
+
 		return (
-			<ErrorMessage
-				style={{
-					width,
-					height: height ?? width,
+			<Styles
+				ref={ref}
+				id={id}
+				width={width}
+				height={height ?? width}
+				onMouseDown={(ev) => {
+					if (!!onMouseDown) {
+						const event: CanvasMouseEvent = {
+							...ev,
+							target: (document.getElementById(id) as HTMLCanvasElement)!,
+						};
+						onMouseDown(event);
+					}
 				}}
 			>
-				{error.message}
-				{stack.map((line, i) => (
-					<span key={i}>{line}</span>
-				))}
-			</ErrorMessage>
+				This browser does not support the {'"'}canvas{'"'} HTML5 tag.
+			</Styles>
 		);
 	}
-
-	return (
-		<Styles
-			{...{
-				id,
-				ref,
-				width,
-			}}
-			height={height ?? width}
-		>
-			This browser does not support the {'"'}canvas{'"'} HTML5 tag.
-		</Styles>
-	);
-});
+);
 
 type StandardCanvasProps = Omit<Props, "id" | "width"> & {
 	width?: number;
