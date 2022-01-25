@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { Optional } from "@andrew-r-king/react-kitchen";
 
 export type CanvasMouseEvent = React.MouseEvent & {
-	target?: HTMLCanvasElement;
+	target: HTMLCanvasElement;
+	normalX: number;
+	normalY: number;
 };
 
 type Props = {
@@ -48,9 +50,22 @@ const Canvas = React.forwardRef(
 				height={height ?? width}
 				onMouseDown={(ev) => {
 					if (!!onMouseDown) {
+						ev.preventDefault();
+
+						const target = (document.getElementById(id) as HTMLCanvasElement)!;
+
+						let normalX = ev.clientX;
+						let normalY = ev.clientY;
+						const rect = target.getBoundingClientRect();
+
+						normalX = (normalX - rect.left - target.width / 2) / (target.width / 2);
+						normalY = (target.height / 2 - (normalY - rect.top)) / (target.height / 2);
+
 						const event: CanvasMouseEvent = {
 							...ev,
-							target: (document.getElementById(id) as HTMLCanvasElement)!,
+							target,
+							normalX,
+							normalY,
 						};
 						onMouseDown(event);
 					}

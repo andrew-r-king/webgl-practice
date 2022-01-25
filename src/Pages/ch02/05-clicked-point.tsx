@@ -56,17 +56,8 @@ class Program implements BootlegThree {
 	onMouseDown = (ev: CanvasMouseEvent, gl: Optional<WebGLContext>): void => {
 		if (!gl) return;
 
-		let x = ev.clientX;
-		let y = ev.clientY;
-		const canvas = ev.target;
-		let rect = canvas.getBoundingClientRect();
-
-		x = (x - rect.left - canvas.width / 2) / (canvas.width / 2);
-		y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
-		// console.log(x, y, rect);
-
-		this.points.push(x);
-		this.points.push(y);
+		this.points.push(ev.normalX);
+		this.points.push(ev.normalY);
 
 		this.onDraw(gl);
 	};
