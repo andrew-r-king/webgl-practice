@@ -1,1 +1,1 @@
-export * from "./Vector";
+export * from "./TypesWebGL";

@@ -16,6 +16,7 @@ export interface BootlegThree {
 
 	onLoad?: (gl: WebGLContext) => void;
 	onDraw?: (gl: WebGLContext) => void;
+
 	onMouseDown?: (ev: CanvasMouseEvent, gl: WebGLContext) => void;
 	onMouseUp?: (ev: CanvasMouseEvent, gl: WebGLContext) => void;
 	onMouseMove?: (ev: CanvasMouseEvent, gl: WebGLContext) => void;

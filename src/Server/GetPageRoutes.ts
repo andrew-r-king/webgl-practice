@@ -1,8 +1,9 @@
+import dynamic from "next/dynamic";
 import path from "path";
 
 import { recursiveDirectorySearch } from "Server/RecursiveDirectorySearch";
 
-import { ResultsGetPageRoutes } from "./ResultTypes";
+import { PageMeta, ResultsGetPageRoutes } from "./ResultTypes";
 
 const excludes: string[] = ["/index"];
 
@@ -21,7 +22,7 @@ const getPageRoutes = async (): Promise<ResultsGetPageRoutes> => {
 	try {
 		const dirPages = path.join("src", "Pages");
 		const pathsRaw = await recursiveDirectorySearch(dirPages, ["tsx"]);
-		const paths = pathsRaw.reduce<string[]>(
+		const pathsResolved = pathsRaw.reduce<string[]>(
 			(acc, inPath, i, arr) => {
 				let result: string = inPath.substring(0, inPath.lastIndexOf("."));
 				result = result.slice(dirPages.length + 1);
@@ -32,6 +33,32 @@ const getPageRoutes = async (): Promise<ResultsGetPageRoutes> => {
 				return acc;
 			},
 			["/"]
+		);
+
+		const paths: PageMeta[] = await Promise.all(
+			pathsResolved.map(async (route) => {
+				try {
+					if (route === "/") {
+						return {
+							title: "Home",
+							route,
+						};
+					}
+
+					const ComponentImport: any = await import(`../Pages${route}`);
+					const title = ComponentImport.title ?? "Untitled";
+					return {
+						title,
+						route,
+					};
+				} catch (err: any) {
+					console.log(err);
+					return {
+						title: route,
+						route,
+					};
+				}
+			})
 		);
 
 		return {

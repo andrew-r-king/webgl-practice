@@ -26,7 +26,7 @@ export const getStaticPaths = async () => {
 		const { paths } = await getPageRoutes();
 		return {
 			fallback: false,
-			paths,
+			paths: paths.map(({ route }) => route),
 		};
 	} catch (err: any) {
 		console.error(err?.message);

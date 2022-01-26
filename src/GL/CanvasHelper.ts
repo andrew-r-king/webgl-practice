@@ -9,8 +9,8 @@ const glErrors = {
 	},
 };
 
-const checkError = (gl: WebGLContext, result: number, funcName?: string): Optional<Error> => {
-	if (result > 0) {
+const checkError = (gl: WebGLContext, result: any, funcName?: string): Optional<Error> => {
+	if (result > 0 || result === null) {
 		const glErr = gl.getError();
 		if (glErr !== gl.NO_ERROR) {
 			const errorEntries = {
@@ -45,7 +45,7 @@ const checkError = (gl: WebGLContext, result: number, funcName?: string): Option
 export type FlatContext = CanvasRenderingContext2D;
 export type WebGLContext = WebGL2RenderingContext & {
 	errors: typeof glErrors;
-	check: (func: (...args: any[]) => number, ...args: any[]) => number;
+	check: <T>(func: (...args: any[]) => T, ...args: any[]) => T;
 	program?: WebGLProgram;
 };
 
@@ -70,7 +70,7 @@ const create3DContextImpl = (canvas: HTMLCanvasElement, attributes: any) => {
 		} catch {}
 
 		if (!!context) {
-			context.check = function (func: (...args: any[]) => number, ...args: any[]) {
+			context.check = function (func: (...args: any[]) => any, ...args: any[]) {
 				const result = func.call(this, ...args);
 				const error = checkError(context!, result, func.name);
 				if (!!error) {

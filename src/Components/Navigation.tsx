@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
+import { ResultsGetPageRoutes } from "Server/ResultTypes";
+
 import { Link } from "./Link";
 
-export type NavProps = React.PropsWithChildren<{
-	paths: string[];
-}>;
+export type NavProps = React.PropsWithChildren<ResultsGetPageRoutes>;
 
 const Navigation = ({ paths, children }: NavProps) => {
-	const links = paths.map((path, i) => {
+	const links = paths.map(({ title, route }, i) => {
 		return (
-			<Link href={path} key={i}>
-				{path}
+			<Link href={route} key={i}>
+				{title}
 			</Link>
 		);
 	});
