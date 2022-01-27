@@ -8,7 +8,7 @@ import { BootlegThree, CanvasMouseEvent, WebGLContext } from "GL";
 import { useWebGL } from "Hooks";
 import { ColorRGBA, Vec2 } from "Types";
 
-export const title = "Ch02: Colored Point";
+export const title = "Ch02: Colored Points";
 
 const vert: string = `
 attribute vec4 a_Position;
@@ -27,10 +27,7 @@ void main() {
 	gl_FragColor = u_FragColor;
 }`;
 
-class Program implements BootlegThree {
-	vert = vert;
-	frag = frag;
-
+class Program extends BootlegThree {
 	position: number = 0;
 	pointSize: number = 0;
 	fragColor: Optional<WebGLUniformLocation> = null;
@@ -38,7 +35,9 @@ class Program implements BootlegThree {
 	colors: ColorRGBA[] = [];
 
 	onLoad = (gl: WebGLContext): void => {
-		if (!gl.program) throw gl.errors.programNotFound();
+		this.createProgram(gl, vert, frag);
+
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
 		this.position = gl.check(gl.getAttribLocation, gl.program, "a_Position");
 
@@ -49,8 +48,6 @@ class Program implements BootlegThree {
 	};
 
 	onDraw = (gl: WebGLContext): void => {
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
 		for (let i = 0; i < this.points.length; ++i) {
@@ -67,9 +64,11 @@ class Program implements BootlegThree {
 	private kPointMax: number = 100;
 	private addPixelFromMouse = (ev: CanvasMouseEvent, gl: WebGLContext) => {
 		this.points.push([ev.normalX, ev.normalY]);
+
+		// Convert coordinates to 0,0 in TL and 1,1 in BR
 		const colR = normalize(ev.normalX);
-		const colG = normalize(ev.normalY);
-		const colB = (colR - colG) / 2.0;
+		const colG = 1.0 - normalize(ev.normalY);
+		const colB = (colR + colG) / 2.0;
 
 		this.colors.push([colR, colG, colB, 1.0]);
 

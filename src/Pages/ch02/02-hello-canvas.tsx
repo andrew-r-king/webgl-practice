@@ -4,9 +4,12 @@ import { useWebGL } from "Hooks";
 
 export const title = "Ch02: Hello Canvas";
 
-class Program implements BootlegThree {
-	onDraw = (gl: WebGLContext): void => {
+class Program extends BootlegThree {
+	onLoad = (gl: WebGLContext): void => {
 		gl.clearColor(0.1, 0.7, 0.3, 1.0);
+	};
+
+	onDraw = (gl: WebGLContext): void => {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 	};
 }

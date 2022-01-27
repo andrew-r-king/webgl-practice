@@ -2,7 +2,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 
 import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
 
-import { BootlegThree, CanvasHelper, initShaders, WebGLContext } from "GL";
+import { BootlegThree, CanvasHelper, WebGLContext } from "GL";
 
 type OutProps = {
 	ref: RefObject<HTMLCanvasElement>;
@@ -25,12 +25,6 @@ function useWebGL<T extends BootlegThree>(program: ClassType<T>, id: string = "m
 			let context = CanvasHelper.create3DContext(ref.current);
 			if (!!context) {
 				try {
-					if (!!program3d.vert && !!program3d.frag) {
-						let program = initShaders(context, program3d.vert, program3d.frag);
-						if (!!program) {
-							context.program = program;
-						}
-					}
 					program3d.onLoad?.(context);
 					program3d.onDraw?.(context);
 					setGL(context);

@@ -26,7 +26,10 @@ const Page = ({ title, children, ...navProps }: Props) => {
 			<Main>
 				<Container>
 					<PageHeader name={title} />
-					<Navigation {...navProps}>{children}</Navigation>
+					<Content>
+						<Navigation {...navProps}></Navigation>
+						<div>{children}</div>
+					</Content>
 				</Container>
 			</Main>
 		</>
@@ -53,4 +56,8 @@ const Container = styled.div`
 	max-width: 64rem;
 	background: ${Theme.background};
 	border-radius: 1rem;
+`;
+
+const Content = styled.div`
+	display: flex;
 `;

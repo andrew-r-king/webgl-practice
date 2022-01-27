@@ -24,19 +24,17 @@ const frag: string = `void main() {
 	gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
 }`;
 
-class Program implements BootlegThree {
-	vert = vert;
-	frag = frag;
-
+class Program extends BootlegThree {
 	position: number = 0;
 	pointSize: number = 0;
 
 	onLoad = (gl: WebGLContext): void => {
-		if (!gl.program) throw gl.errors.programNotFound();
+		this.createProgram(gl, vert, frag);
+
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	};
 
 	onDraw = (gl: WebGLContext): void => {
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT);
 		gl.drawArrays(gl.POINTS, 0, 1);
 	};

@@ -5,39 +5,28 @@ import { ResultsGetPageRoutes } from "Server/ResultTypes";
 
 import { Link } from "./Link";
 
-export type NavProps = React.PropsWithChildren<ResultsGetPageRoutes>;
+export type NavProps = ResultsGetPageRoutes;
 
-const Navigation = ({ paths, children }: NavProps) => {
-	const links = paths.map(({ title, route }, i) => {
-		return (
-			<Link href={route} key={i}>
-				{title}
-			</Link>
-		);
-	});
+const Navigation = ({ paths }: NavProps) => {
+	const links = paths.map(({ title, route }, i) => (
+		<Link href={route} key={i}>
+			{title}
+		</Link>
+	));
 
-	return (
-		<Styles>
-			<div className="links">{links}</div>
-			<div>{children}</div>
-		</Styles>
-	);
+	return <Styles>{links}</Styles>;
 };
 
 export { Navigation };
 
 const Styles = styled.div`
 	display: flex;
+	flex-direction: column;
+	padding-right: 2rem;
+	width: 17.5rem;
 
-	> .links {
-		display: flex;
-		flex-direction: column;
-		padding-right: 2rem;
-		width: 17.5rem;
-
-		> a {
-			display: block;
-			line-height: 1.5;
-		}
+	> a {
+		display: block;
+		line-height: 1.5;
 	}
 `;

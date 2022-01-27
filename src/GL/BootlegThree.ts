@@ -1,6 +1,7 @@
 import React from "react";
 
 import { WebGLContext } from "./CanvasHelper";
+import { initShaders } from "./ShaderHelper";
 
 export type CanvasMouseEvent = React.MouseEvent & {
 	target: HTMLCanvasElement;
@@ -8,11 +9,18 @@ export type CanvasMouseEvent = React.MouseEvent & {
 	normalY: number;
 };
 
-export interface BootlegThree {
+export abstract class BootlegThree {
 	width?: number;
 	height?: number;
-	vert?: string;
-	frag?: string;
+
+	protected createProgram = (gl: WebGLContext, vert: string, frag: string) => {
+		let program = initShaders(gl, vert, frag);
+		if (!!program) {
+			gl.program = program;
+		} else {
+			throw gl.errors.programNotFound();
+		}
+	};
 
 	onLoad?: (gl: WebGLContext) => void;
 	onDraw?: (gl: WebGLContext) => void;
