@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 import { Canvas } from "Components";
 import { normalize, remap } from "Functions";
@@ -42,7 +42,7 @@ class Program extends BootlegThree {
 		this.position = gl.check(gl.getAttribLocation, gl.program, "a_Position");
 
 		this.pointSize = gl.check(gl.getAttribLocation, gl.program, "a_PointSize");
-		gl.vertexAttrib1f(this.pointSize, 10.0);
+		gl.vertexAttrib1f(this.pointSize, 20.0);
 
 		this.fragColor = gl.check(gl.getUniformLocation, gl.program, "u_FragColor");
 	};
@@ -68,7 +68,7 @@ class Program extends BootlegThree {
 		// Convert coordinates to 0,0 in TL and 1,1 in BR
 		const colR = normalize(ev.normalX);
 		const colG = 1.0 - normalize(ev.normalY);
-		const colB = (colR + colG) / 2.0;
+		const colB = 1.0 - (colR + colG) / 2.0;
 
 		this.colors.push([colR, colG, colB, 1.0]);
 

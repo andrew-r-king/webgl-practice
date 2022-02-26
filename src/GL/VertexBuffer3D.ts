@@ -1,4 +1,4 @@
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 import { Vec3 } from "Types";
 

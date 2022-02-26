@@ -1,7 +1,7 @@
 import React, { ForwardedRef, useCallback } from "react";
 import styled from "styled-components";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 import { BootlegThree, CanvasMouseEvent, FlatContext, WebGLContext } from "GL";
 import { BootlegTwo } from "GL/BootlegTwo";

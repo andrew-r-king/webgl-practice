@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { ClassType, Optional } from "@andrew-r-king/react-kitchen";
+import { ClassType, Optional } from "@rewrking/react-kitchen";
 
 import { CanvasHelper, FlatContext } from "GL";
 import { BootlegTwo } from "GL/BootlegTwo";
