@@ -21,7 +21,9 @@ if (progress === null) {
 	Router.events.on("routeChangeError", progress.finish);
 }
 
-type Props = AppProps;
+type Props = AppProps & {
+	Component: any;
+};
 
 const Main = ({ Component, pageProps }: Props) => {
 	return (
