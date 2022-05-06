@@ -1,8 +1,7 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 
-import { ClassType, Optional } from "@rewrking/react-kitchen";
-
 import { BootlegThree, CanvasHelper, WebGLContext } from "GL";
+import { ClassType, Optional } from "Types";
 
 type OutProps = {
 	ref: RefObject<HTMLCanvasElement>;

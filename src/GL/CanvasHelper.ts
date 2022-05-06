@@ -1,4 +1,4 @@
-import { Optional } from "@rewrking/react-kitchen";
+import { Optional } from "Types";
 
 const glErrors = {
 	programNotFound: (): Error => {

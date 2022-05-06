@@ -1,5 +1,4 @@
-import { Optional } from "@rewrking/react-kitchen";
-
+import { Optional } from "Types";
 import { Vec3 } from "Types";
 
 import { WebGLContext } from "./CanvasHelper";

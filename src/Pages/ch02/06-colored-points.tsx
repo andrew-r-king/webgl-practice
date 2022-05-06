@@ -1,11 +1,10 @@
 import React from "react";
 
-import { Optional } from "@rewrking/react-kitchen";
-
 import { Canvas } from "Components";
 import { normalize, remap } from "Functions";
 import { BootlegThree, CanvasMouseEvent, WebGLContext } from "GL";
 import { useWebGL } from "Hooks";
+import { Optional } from "Types";
 import { ColorRGBA, Vec2 } from "Types";
 
 export const title = "Ch02: Colored Points";

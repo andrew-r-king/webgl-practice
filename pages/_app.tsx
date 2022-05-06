@@ -3,9 +3,9 @@ import Router from "next/router";
 import React from "react";
 
 import ProgressBar from "@badrap/bar-of-progress";
-import { Optional } from "@rewrking/react-kitchen";
 
 import { BaseStyle } from "Components";
+import { Optional } from "Types";
 
 let progress: Optional<ProgressBar> = null;
 if (progress === null) {
